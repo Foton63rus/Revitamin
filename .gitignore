@@ -1,0 +1,5 @@
+/bin/Release/tmpl
+/bin
+/obj
+/packages
+/.vs
