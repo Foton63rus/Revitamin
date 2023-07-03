@@ -1,22 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using System.Net;
+using System.Text;
 using System.Windows;
-using Autodesk.Revit.DB;
-using System;
 using Revitamin.Entity;
 
 namespace Revitamin
 {
     public partial class UserWindow : Window
     {
-        IList<Element> allWalls;
-        BM bm;
-        public UserWindow( BM bm)
+        string url = "http://edin.starkandbau.ru/write";
+        Specificator specificator;
+        public UserWindow( Specificator specificator)
         {
             InitializeComponent();
-            this.bm = bm;
+            this.specificator = specificator;
+            string json = specificator.GetJson();
+            ConsoleBlock.Text += json;
 
-            ConsoleBlock.Text += "Info:\n";
-            ConsoleBlock.Text += bm.GetInfo();
+            //WebPostRequest(url, json);
+        }
+        public string WebPostRequest(string url, string data)
+        {
+            using (WebClient client = new WebClient())
+            {
+                var reqparm = new System.Collections.Specialized.NameValueCollection();
+                reqparm.Add("data", data);
+                byte[] responsebytes = client.UploadValues(url, "POST", reqparm);
+                string responsebody = Encoding.UTF8.GetString(responsebytes);
+                MessageBox.Show(responsebody);
+                return responsebody;
+            }
         }
     }
 }

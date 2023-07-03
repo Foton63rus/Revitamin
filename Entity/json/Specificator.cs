@@ -1,17 +1,14 @@
 ﻿using Autodesk.Revit.DB;
 using Revitamin.Entity.json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
-using Microsoft.Office.Interop.Excel;
 
 namespace Revitamin.Entity
 {
     public class Specificator
     {
         private Document _document;
-
         public Specificator(Document document, string outputPath = "")
         {
             this._document = document;
@@ -64,13 +61,15 @@ namespace Revitamin.Entity
                 JsonElement je = new JsonElement();
 
                 je.category = element.Category.Name;
-                je.name = element.Name;
-                je.className = "";
-                je.material = getMaterials(element);
-                je.level = GetLevel(element);
-                je.v = GetComputedVolumeOfElement(element);
-                je.m = 0;//GetMass(element);
-                je.s = GetComputedAreaOfElement(element);
+                je.name = element.Name + $" = {Calculation.GetStructuralElevation(element)}";
+                je.className = _document.GetElement(element.GetTypeId())?
+                                  .get_Parameter(BuiltInParameter.UNIFORMAT_CODE)?
+                                  .AsString() ?? "Undefined";
+                je.material = Calculation.getMaterials(element, _document);
+                je.level = Calculation.GetLevel(element);
+                je.v = Calculation.GetComputedVolumeOfElement(element);
+                je.m = 0;//Calculation.GetMass(element);
+                je.s = Calculation.GetComputedAreaOfElement(element);
 
                 if (je.material.Length == 0 &&
                     je.level == null &&
@@ -87,45 +86,6 @@ namespace Revitamin.Entity
             {
                 return null;
             }
-        }
-
-        private string[] getMaterials(Element e)
-        {
-            try
-            {
-                var matsIds = e.GetMaterialIds(false).ToList();
-                string[] mats = new string[matsIds.Count];
-                if (matsIds.Count > 0)
-                {
-                    for (int i = 0; i < matsIds.Count; i++)
-                    {
-                        mats[i] = _document.GetElement(matsIds[i]).Name;
-                    }
-                }
-                return mats;
-            }
-            catch
-            {
-                return new string[] { };
-            }
-        }
-
-        private string GetLevel<T>(T el) where T : Element
-        {
-            Level level = el.Document.GetElement(el.LevelId) as Level;
-            return level?.Name;
-        }
-        private double GetComputedAreaOfElement<T>(T el) where T : Element
-        {
-            return Math.Round(UnitUtils.ConvertFromInternalUnits(el.get_Parameter(BuiltInParameter.HOST_AREA_COMPUTED).AsDouble(), UnitTypeId.SquareMeters), 2);
-        }
-        private double GetComputedVolumeOfElement<T>(T e) where T : Element
-        {
-            return Math.Round(UnitUtils.ConvertFromInternalUnits(e.get_Parameter(BuiltInParameter.HOST_VOLUME_COMPUTED).AsDouble(), UnitTypeId.CubicMeters), 2);
-        }
-        private double GetMass<T>(T e) where T : Element
-        {
-            return Math.Round(UnitUtils.ConvertFromInternalUnits(e.get_Parameter(BuiltInParameter.PHY_MATERIAL_PARAM_STRUCTURAL_DENSITY).AsDouble(), UnitTypeId.KilogramsPerCubicMeter), 2) * GetComputedVolumeOfElement(e);
         }
     }
 }
