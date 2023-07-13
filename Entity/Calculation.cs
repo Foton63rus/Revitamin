@@ -48,22 +48,29 @@ namespace Revitamin.Entity
         }
         public static double GetStructuralElevation<T>(T e) where T : Element
         {
-            double top = Math.Round(UnitUtils.ConvertFromInternalUnits(e.get_Parameter(BuiltInParameter.STRUCTURAL_ELEVATION_AT_TOP).AsDouble(), UnitTypeId.Millimeters), 2);
-            double bottom = Math.Round(UnitUtils.ConvertFromInternalUnits(e.get_Parameter(BuiltInParameter.STRUCTURAL_ELEVATION_AT_BOTTOM).AsDouble(), UnitTypeId.Millimeters), 2);
+            if (e.Category.BuiltInCategory == BuiltInCategory.OST_StructuralColumns)
+            {
+                return Elevation4StructuralColumns(e);
+            }
+
+            return ElevationBySTRUCTURAL_ELEVATION(e);
+        }
+        private static double ElevationBySTRUCTURAL_ELEVATION(Element e)
+        {
+            double top = Math.Round(UnitUtils.ConvertFromInternalUnits(e.get_Parameter(BuiltInParameter.STRUCTURAL_ELEVATION_AT_TOP).AsDouble(), UnitTypeId.Meters), 2);
+            double bottom = Math.Round(UnitUtils.ConvertFromInternalUnits(e.get_Parameter(BuiltInParameter.STRUCTURAL_ELEVATION_AT_BOTTOM).AsDouble(), UnitTypeId.Meters), 2);
             double max = Math.Max(top, bottom);
             double min = Math.Min(top, bottom);
 
             return max - min;
-
-            //if (e.Category.BuiltInCategory == BuiltInCategory.OST_Floors)
-            //{
-            //    double top = Math.Round(UnitUtils.ConvertFromInternalUnits(e.get_Parameter(BuiltInParameter.STRUCTURAL_ELEVATION_AT_TOP).AsDouble(), UnitTypeId.Millimeters), 2);
-            //    double bottom = Math.Round(UnitUtils.ConvertFromInternalUnits(e.get_Parameter(BuiltInParameter.STRUCTURAL_ELEVATION_AT_BOTTOM).AsDouble(), UnitTypeId.Millimeters), 2);
-            //    double max = Math.Max(top, bottom);
-            //    double min = Math.Min(top, bottom);
-
-            //    return max - min;
-            //}
+        }
+        private static double Elevation4StructuralColumns(Element e)
+        {
+            return Math.Round(UnitUtils.ConvertFromInternalUnits(e.get_Parameter(BuiltInParameter.INSTANCE_LENGTH_PARAM).AsDouble(), UnitTypeId.Meters), 2);
+        }
+        public static double ConvertToMeters(double number, int symbolsAfterPoint = 2)
+        {
+            return Math.Round(UnitUtils.ConvertFromInternalUnits(number, UnitTypeId.Meters), symbolsAfterPoint);
         }
     }
 }
