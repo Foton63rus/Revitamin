@@ -31,7 +31,7 @@ namespace Revitamin
 
             tboxCheckerConsole.Text = "";
 
-            foreach (string key in CMD_GetInfo.GLOBAL_VARIABLES.BuiltInCategories.Keys)
+            foreach (string key in CMD_GetInfo.GLOBAL_VARIABLES.BuiltInCategories.Keys.OrderBy(x => x))
             {
                 ComboBoxCategoryParametrChecker.Items.Add(key);
             }
@@ -51,11 +51,7 @@ namespace Revitamin
         void btnCheckerCheckClick(object sender, RoutedEventArgs e)
         {
             //tboxCheckerConsole.Text += $"{ComboBoxCategoryParametrChecker.SelectedItem} {tboxCheckerParameter.Text}\n";
-            tboxCheckerConsole.Text += $"{checker.check()}\n";
-        }
-        void btnCheckerClearConsoleClick(object sender, RoutedEventArgs e)
-        {
-            tboxCheckerConsole.Text = "";
+            tboxCheckerConsole.Text = $"{checker.check()}\n";
         }
     }
 }

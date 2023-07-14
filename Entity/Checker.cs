@@ -28,7 +28,7 @@ namespace Revitamin.Entity
             string category = _userWindow.ComboBoxCategoryParametrChecker.Text;
             List<Element> Filter;
             StringBuilder sb = new StringBuilder();
-            int writeCount;
+            string writeCount;
             if (category == "All") 
             {
                 Filter = new FilteredElementCollector(_document).WhereElementIsNotElementType().ToList();
@@ -40,17 +40,26 @@ namespace Revitamin.Entity
                 Filter = new FilteredElementCollector(_document).WhereElementIsNotElementType().OfCategory(cat).ToList();
                 writeCount = writeParameterValue(sb, Filter, parameter);
             }
-            sb.AppendLine($"Поиск параметров завершён с {writeCount} совпадений");
+            sb.AppendLine($"Поиск параметров завершён. Заполненность = {writeCount}");
             return sb.ToString();
         }
-        int writeParameterValue(StringBuilder sb, List<Element> filter, string parameter)
+        string writeParameterValue(StringBuilder sb, List<Element> filter, string parameter)
         {
             int counter = 0;
+            int counterParamHasValue = 0;
             foreach (Element element in filter)
             {
                 try
                 {
                     string parameterValue = _document.GetElement(element.GetTypeId()).LookupParameter(parameter).AsValueString();
+                    if (parameterValue != null || parameterValue == "")
+                    {
+                        counterParamHasValue++;
+                    }
+                    else
+                    {
+                        parameterValue = "{НЕТ ЗНАЧЕНИЯ}";
+                    }
                     sb.AppendLine($"{element.Id} {element.Name} => {parameterValue}");
                     counter++;
                 }
@@ -59,7 +68,7 @@ namespace Revitamin.Entity
                     //sb.AppendLine($"{{{element.Id} {element.Name}}} => - "); 
                 }
             }
-            return counter;
+            return $"{counterParamHasValue} из {counter}";
         }
     }
 
