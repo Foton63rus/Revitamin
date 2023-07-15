@@ -13,6 +13,7 @@ namespace Revitamin
     public class CMD_GetInfo : IExternalCommand
     {
         public static GlobalVariables GLOBAL_VARIABLES;
+        public static ExternalCommandData CommandData;
         public static UserWindow userWindow;
         private static Document document = null;
         private Specificator specificator;
@@ -30,6 +31,7 @@ namespace Revitamin
         }
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
+            CommandData = commandData;
             InitVariables();
 
             Document = commandData.Application.ActiveUIDocument.Document;

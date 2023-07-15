@@ -10,6 +10,7 @@
             <Grid Margin="0,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50px"/>
+                    <RowDefinition Height= "50px" />
                     <RowDefinition Height= "400px" />
                 </Grid.RowDefinitions>
                 <ComboBox x:Name="ComboBoxCategoryParametrChecker" 
@@ -42,16 +43,17 @@
                     VerticalAlignment="Top"/>
                 <!--/// Console-->
                 <ScrollViewer 
-                    Grid.Row="1" 
+                    x:Name="CheckerScroll"
+                    Grid.Row="2" 
                     Margin="0,0,0,-16">
-                    <TextBox 
+                    <StackPanel x:Name="CheckerStackPanel"/>
+                </ScrollViewer>
+                <TextBox 
                          x:Name="tboxCheckerConsole"
-                         Grid.Row="1" 
-                         Margin="0,0,0,0" 
+                         Grid.Row="1"  
                          TextWrapping="Wrap" 
                          Text="Console:" 
                          Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"/>
-                </ScrollViewer>
             </Grid>
         </TabItem>
         <!--/// Вкладка 2-->

@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using Autodesk.Revit.DB;
+using Newtonsoft.Json.Linq;
 using Revitamin.Entity;
 
 namespace Revitamin
@@ -50,8 +51,24 @@ namespace Revitamin
         }
         void btnCheckerCheckClick(object sender, RoutedEventArgs e)
         {
-            //tboxCheckerConsole.Text += $"{ComboBoxCategoryParametrChecker.SelectedItem} {tboxCheckerParameter.Text}\n";
             tboxCheckerConsole.Text = $"{checker.check()}\n";
+        }
+        public void AddButton(ElementId ID, string content)
+        {
+            Button btn = new Button();
+            btn.Width = 400;
+            btn.Content = content;
+            btn.Height = 30;
+            //Trigger trigger = new Trigger();
+            //Setter setter = new Setter();
+            //trigger.Property = IsMouseOverProperty;
+            //trigger.Value = "True";
+            //setter.Property = BackgroundProperty;
+            //setter.Value = "DarkGoldenrod";
+            //trigger.Setters.Add(setter);
+            //btn.Style.Triggers.Add(trigger);
+            btn.Click += (s, e) => { CMD_GetInfo.CommandData.Application.ActiveUIDocument.Selection.SetElementIds(new List<ElementId>() { ID }); };
+            this.CheckerStackPanel.Children.Add(btn);
         }
     }
 }

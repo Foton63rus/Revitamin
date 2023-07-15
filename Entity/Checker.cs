@@ -1,16 +1,17 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using Autodesk.Revit.Attributes;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows.Controls.Primitives;
-using Microsoft.Office.Interop.Excel;
 
 namespace Revitamin.Entity
 {
-    internal class Checker : IChecker
+    
+    public class Checker : IChecker
     {
+        public delegate void checkedNewItem(ElementId ID, string content);
+        public event checkedNewItem OnCheckedNewItem;
+
         private Document _document;
         private UserWindow _userWindow;
         public Checker(Document document) 
@@ -20,6 +21,7 @@ namespace Revitamin.Entity
         void IChecker.SetUserWindow(UserWindow userWindow)
         {
             _userWindow = userWindow;
+            OnCheckedNewItem += _userWindow.AddButton;
         }
 
         string IChecker.check()
@@ -47,6 +49,7 @@ namespace Revitamin.Entity
         {
             int counter = 0;
             int counterParamHasValue = 0;
+            _userWindow.CheckerStackPanel.Children.Clear();
             foreach (Element element in filter)
             {
                 try
@@ -60,7 +63,11 @@ namespace Revitamin.Entity
                     {
                         parameterValue = "{НЕТ ЗНАЧЕНИЯ}";
                     }
-                    sb.AppendLine($"{element.Id} {element.Name} => {parameterValue}");
+                    string output = $"{element.Id} {element.Name} => {parameterValue}";
+                    sb.AppendLine(output);
+                    ElementId ID = element.Id;
+                    //AddButton(ID, output);
+                    OnCheckedNewItem?.Invoke(ID, output);
                     counter++;
                 }
                 catch
@@ -77,4 +84,5 @@ namespace Revitamin.Entity
         void SetUserWindow(UserWindow userWindow);
         string check();
     }
+
 }
