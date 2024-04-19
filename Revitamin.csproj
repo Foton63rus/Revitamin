@@ -70,6 +70,9 @@
     <Compile Include="Entity\json\JsonElement.cs" />
     <Compile Include="Entity\json\JsonSpecification.cs" />
     <Compile Include="Entity\json\Specificator.cs" />
+    <Compile Include="Entity\WebService\IWebService.cs" />
+    <Compile Include="Entity\WebService\ResponsedJson.cs" />
+    <Compile Include="Entity\WebService\WebService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserWindow.xaml.cs">
       <DependentUpon>UserWindow.xaml</DependentUpon>

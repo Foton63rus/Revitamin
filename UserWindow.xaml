@@ -60,18 +60,19 @@
         <TabItem Header="Вкладка 2">
             <Grid Margin="0,0,0,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.25*"/>
-                    <ColumnDefinition Width="0.75*"/>
+                    <ColumnDefinition Width="0*"/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <ScrollViewer Grid.Column="1">
+                <ScrollViewer Grid.Column="1" Margin="0,41,0,0">
                     <TextBlock 
                         x:Name = "ConsoleBlock"
                         Grid.Column="1"
                         Margin="0, 0, 0, 0"
                         Text="Console:"
                         TextWrapping="Wrap" 
-                        Background="#FFEAEAEA"/>
+                        Background="#FFEAEAEA" Width="460" Height="422"/>
                 </ScrollViewer>
+                <Button Content="Send2Server" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="26" Width="97" Click="btnSend2ServerClick"/>
             </Grid>
         </TabItem>
     </TabControl>

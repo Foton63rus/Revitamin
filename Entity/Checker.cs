@@ -52,17 +52,19 @@ namespace Revitamin.Entity
             _userWindow.CheckerStackPanel.Children.Clear();
             foreach (Element element in filter)
             {
-                try
+                var currentParameter = _document.GetElement(element.GetTypeId())?.LookupParameter(parameter);
+                if (currentParameter != null)
                 {
-                    string parameterValue = _document.GetElement(element.GetTypeId()).LookupParameter(parameter).AsValueString();
-                    if (parameterValue != null || parameterValue == "")
+                    string parameterValue = currentParameter.AsValueString();
+                    if (parameterValue == "" || parameterValue == null)
+                    {
+                        parameterValue = "{НЕТ ЗНАЧЕНИЯ}";
+                    }// Описание
+                    else
                     {
                         counterParamHasValue++;
                     }
-                    else
-                    {
-                        parameterValue = "{НЕТ ЗНАЧЕНИЯ}";
-                    }
+
                     string output = $"{element.Id} {element.Name} => {parameterValue}";
                     sb.AppendLine(output);
                     ElementId ID = element.Id;
@@ -70,9 +72,9 @@ namespace Revitamin.Entity
                     OnCheckedNewItem?.Invoke(ID, output);
                     counter++;
                 }
-                catch
+                else
                 {
-                    //sb.AppendLine($"{{{element.Id} {element.Name}}} => - "); 
+                    
                 }
             }
             return $"{counterParamHasValue} из {counter}";

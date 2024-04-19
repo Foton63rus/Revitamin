@@ -3,6 +3,7 @@ using Revitamin.Entity.json;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using System.Windows;
 
 namespace Revitamin.Entity
 {
@@ -28,14 +29,18 @@ namespace Revitamin.Entity
                     objects.Add(tmpObject);
                 }
             }
-            JsonSpecification specification = new JsonSpecification(filename, objects.ToArray(), project);
-            string JSON = JsonConvert.SerializeObject(specification, Formatting.Indented);
-            return JSON;
+            //JsonSpecification specification = new JsonSpecification(filename, objects.ToArray(), project);
+            //string JSON = JsonConvert.SerializeObject(specification, Formatting.Indented);
+            //MessageBox.Show($"pre: {JSON}");
+            return "";//JSON;
         }
         public string GetJson()
         {
             List<Element> Filter = new FilteredElementCollector(_document).WhereElementIsNotElementType().ToList();
-            string json = PrepareSpecificationToJson(Filter);
+            //string json = PrepareSpecificationToJson(Filter);
+            string project_id = _document.GetProjectId();
+            string project_key = _document.ProjectInformation.Name.ToString();
+            string project_version = _document.ProjectInformation.VersionGuid.ToString();
 
             string filename = _document.PathName;
             string project = _document.ProjectInformation.Name;
@@ -49,8 +54,9 @@ namespace Revitamin.Entity
                     objects.Add(tmpObject);
                 }
             }
-            JsonSpecification specification = new JsonSpecification(filename, objects.ToArray(), project);
+            JsonSpecification specification = new JsonSpecification(project_id, project_key, project_version, filename, objects.ToArray(), project);
             string JSON = JsonConvert.SerializeObject(specification, Formatting.Indented);
+            //MessageBox.Show($"GetJson: {JSON}");
             return JSON;
         }
 
@@ -60,6 +66,7 @@ namespace Revitamin.Entity
             {
                 JsonElement je = new JsonElement();
 
+                je.object_id = element.Id.IntegerValue;
                 je.category = element.Category.Name;
                 je.name = element.Name + $" = {Calculation.GetStructuralElevation(element)}";
                 je.className = _document.GetElement(element.GetTypeId())?

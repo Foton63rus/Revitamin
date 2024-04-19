@@ -62,7 +62,7 @@ namespace Revitamin.Entity
             double max = Math.Max(top, bottom);
             double min = Math.Min(top, bottom);
 
-            return max - min;
+            return max - min; //вот тут возможно ошибка
         }
         private static double Elevation4StructuralColumns(Element e)
         {

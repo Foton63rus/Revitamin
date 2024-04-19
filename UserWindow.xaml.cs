@@ -1,21 +1,20 @@
-﻿using System;
+﻿using Autodesk.Revit.DB;
+using Revitamin.Entity;
+using Revitamin.Entity.WebService;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using Autodesk.Revit.DB;
-using Newtonsoft.Json.Linq;
-using Revitamin.Entity;
 
 namespace Revitamin
 {
     public partial class UserWindow : Window
     {
-        string url = "http://edin.starkandbau.ru/write";
+        IWebService webService = new WebService();
+        //string url = "http://uniceros.alexanderivanof.ru/revit-project-objects-add";
         Specificator specificator;
-        private IChecker checker;
+        IChecker checker;
+
         public UserWindow( Specificator specificator)
         {
             InitializeComponent();
@@ -23,6 +22,7 @@ namespace Revitamin
             this.specificator = specificator;
             string json = specificator.GetJson();
             ConsoleBlock.Text += json;
+            //MessageBox.Show(json);
             //WebPostRequest(url, json);
         }
         private void initializeCheckerTab()
@@ -37,18 +37,7 @@ namespace Revitamin
                 ComboBoxCategoryParametrChecker.Items.Add(key);
             }
         }
-        public string WebPostRequest(string url, string data)
-        {
-            using (WebClient client = new WebClient())
-            {
-                var reqparm = new System.Collections.Specialized.NameValueCollection();
-                reqparm.Add("data", data);
-                byte[] responsebytes = client.UploadValues(url, "POST", reqparm);
-                string responsebody = Encoding.UTF8.GetString(responsebytes);
-                MessageBox.Show(responsebody);
-                return responsebody;
-            }
-        }
+
         void btnCheckerCheckClick(object sender, RoutedEventArgs e)
         {
             tboxCheckerConsole.Text = $"{checker.check()}\n";
@@ -69,6 +58,11 @@ namespace Revitamin
             //btn.Style.Triggers.Add(trigger);
             btn.Click += (s, e) => { CMD_GetInfo.CommandData.Application.ActiveUIDocument.Selection.SetElementIds(new List<ElementId>() { ID }); };
             this.CheckerStackPanel.Children.Add(btn);
+        }
+
+        private void btnSend2ServerClick(object sender, RoutedEventArgs e)
+        {
+            webService.PostRequest(specificator.GetJson());
         }
     }
 }

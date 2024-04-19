@@ -5,6 +5,7 @@ namespace Revitamin.Entity.json
     [Serializable]
     public class JsonElement
     {
+        public int object_id;
         public string category;
         public string name;
         public string className;
