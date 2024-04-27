@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.IO;
 
 namespace Revitamin
 {
@@ -20,8 +21,17 @@ namespace Revitamin
             InitializeComponent();
             initializeCheckerTab();
             this.specificator = specificator;
-            string json = specificator.GetJson();
-            ConsoleBlock.Text += json;
+            //string json = specificator.GetJson();
+
+            string json = specificator.CreateJsonView();
+            File.WriteAllText("E:\\JSON\\jsonTest.json", json);
+
+            /*string json = File.ReadAllText("E:\\JSON\\jsonTest.json");
+            webService.PostRequest(json);*/
+
+            ConsoleBlock.Text = json;
+
+
             //MessageBox.Show(json);
             //WebPostRequest(url, json);
         }
@@ -62,7 +72,7 @@ namespace Revitamin
 
         private void btnSend2ServerClick(object sender, RoutedEventArgs e)
         {
-            webService.PostRequest(specificator.GetJson());
+            webService.PostRequest(ConsoleBlock.Text);
         }
     }
 }

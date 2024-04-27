@@ -67,6 +67,8 @@
     <Compile Include="Entity\Calculation.cs" />
     <Compile Include="Entity\Checker.cs" />
     <Compile Include="Entity\GlobalVariables.cs" />
+    <Compile Include="Entity\json\ElementJsonView.cs" />
+    <Compile Include="Entity\json\JKVPair.cs" />
     <Compile Include="Entity\json\JsonElement.cs" />
     <Compile Include="Entity\json\JsonSpecification.cs" />
     <Compile Include="Entity\json\Specificator.cs" />

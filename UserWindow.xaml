@@ -56,23 +56,32 @@
                          Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"/>
             </Grid>
         </TabItem>
-        <!--/// Вкладка 2-->
-        <TabItem Header="Вкладка 2">
+        <!--/// Вкладка JSON-->
+        <TabItem Header="JSON">
             <Grid Margin="0,0,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0*"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <ScrollViewer Grid.Column="1" Margin="0,41,0,0">
+                <ScrollViewer Grid.Column="1" Margin="0,41,0,45">
                     <TextBlock 
-                        x:Name = "ConsoleBlock"
-                        Grid.Column="1"
-                        Margin="0, 0, 0, 0"
-                        Text="Console:"
-                        TextWrapping="Wrap" 
-                        Background="#FFEAEAEA" Width="460" Height="422"/>
+                            x:Name = "ConsoleBlock"
+                            Text="Console:"
+                            TextWrapping="Wrap" 
+                            Background="#FFEAEAEA"
+                            Height="auto"
+                            Width="auto"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"/>
                 </ScrollViewer>
                 <Button Content="Send2Server" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="26" Width="97" Click="btnSend2ServerClick"/>
+                <StatusBar Name="sbar"
+                           Grid.ColumnSpan="2" 
+                           Margin="0,436,0,0">
+                    <StatusBarItem>
+                        <TextBlock Name="StatusBarJson"></TextBlock>
+                    </StatusBarItem>
+                </StatusBar>
+
             </Grid>
         </TabItem>
     </TabControl>

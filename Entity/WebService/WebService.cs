@@ -25,7 +25,7 @@ namespace Revitamin.Entity.WebService
             {
                 try
                 {
-                    byte[] postArray = Encoding.ASCII.GetBytes(json);
+                    byte[] postArray = Encoding.UTF8.GetBytes(json);
                     myWebClient.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
                     byte[] responseArray = myWebClient.UploadData(url, "POST", postArray);
                     responsebody = Encoding.ASCII.GetString(responseArray);

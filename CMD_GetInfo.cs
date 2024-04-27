@@ -49,6 +49,7 @@ namespace Revitamin
         {
             GLOBAL_VARIABLES = new GlobalVariables();
             GLOBAL_VARIABLES.BuiltInCategories = getBuiltInCategories();
+            GlobalVariables.CommandData = CommandData;
         }
         private Dictionary<string, BuiltInCategory> getBuiltInCategories()
         {

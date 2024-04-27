@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Revitamin.Entity.json
 {
@@ -8,11 +9,9 @@ namespace Revitamin.Entity.json
         public int object_id;
         public string category;
         public string name;
-        public string className;
+        public string class_name;
         public string[] material;
         public string level;
-        public double v;
-        public double m;
-        public double s;
+        public List<JKVPair> parameters = new List<JKVPair>();
     }
 }
